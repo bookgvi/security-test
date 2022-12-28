@@ -1,0 +1,4 @@
+url: jdbc:postgresql://localhost:65432/security-test
+username: admin
+password: admin
+driver: org.postgresql.Driver
