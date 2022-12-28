@@ -1,21 +1,28 @@
 package com.example.securitytest.service;
 
+import com.example.securitytest.domain.User;
 import com.example.securitytest.repository.UserRepository;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-@Service
-public class UserService implements UserDetailsService {
-    private final UserRepository userRepository;
+import javax.transaction.Transactional;
 
-    public UserService(UserRepository userRepository) {
+@Service
+public class UserService {
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername();
+    @Transactional
+    public void addUser(User user) {
+        User savedUser = userRepository.findByUserName(user.getUserName());
+        if (savedUser == null) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            userRepository.save(user);
+        }
     }
 }

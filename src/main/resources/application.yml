@@ -1,0 +1,10 @@
+spring:
+  liquibase:
+    enabled: false
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:65432/security-test
+    username: admin
+    password: admin
+  jpa:
+    show-sql: true
